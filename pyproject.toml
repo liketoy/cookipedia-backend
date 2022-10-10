@@ -5,7 +5,7 @@ description = ""
 authors = ["bewoody <woody@maycan.co.kr>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "cookipedia_backend"}]
+packages = [{include = "cookipedia-backend"}]
 
 [tool.poetry.dependencies]
 python = "^3.8"
