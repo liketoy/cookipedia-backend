@@ -7,8 +7,18 @@ from django.utils.translation import gettext_lazy as _
 class User(AbstractUser):
     """사용자 Model에 관한 정의"""
 
+    GENDER_CHOICES = (
+        ("Male", "Male"),
+        ("Female", "Female"),
+        ("Not to disclose", "Not to disclose"),
+    )
+
     email = models.EmailField(_("email address"), unique=True)
+    first_name = None
+    last_name = None
+    name = models.CharField(max_length=40)
     nickname = models.CharField(max_length=40, unique=True)
+    gender = models.CharField(choices=GENDER_CHOICES, blank=False, max_length=30)
     avatar = models.ImageField(blank=True, null=True, upload_to="avatar/%Y/%m/%d/")
     address = models.CharField(max_length=140)
     birth_date = models.DateField(null=True, blank=True)

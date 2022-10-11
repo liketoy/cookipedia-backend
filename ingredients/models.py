@@ -19,8 +19,11 @@ class Ingredient(TimeStampedModel):
     ]
 
     category = models.CharField(choices=INGREDIENT_CATEGORY_CHOICES, max_length=40)
-    name = models.CharField(max_length=40)
-    expiry_date = models.CharField(max_length=30, blank=True)
+    name = models.CharField(max_length=40, unique=True)
+    expiry_date = models.PositiveIntegerField(blank=True)
     calorie_per_100g = models.PositiveIntegerField(default=0)
-    price = models.PositiveIntegerField(verbose_name="가격")
+    price = models.PositiveIntegerField(default=0)
     preservation = models.CharField(max_length=80)
+
+    def __str__(self) -> str:
+        return self.name

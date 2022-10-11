@@ -16,7 +16,7 @@ class Food(TimeStampedModel):
     ]
 
     category = models.CharField(choices=FOOD_CATEGORY_CHOICES, max_length=40)
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
 
     def __str__(self) -> str:
-        return f"{self.name}"
+        return self.name

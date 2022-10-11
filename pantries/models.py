@@ -10,6 +10,9 @@ class Pantry(TimeStampedModel):
         "ingredients.Ingredient", through="StoreIngredient", related_name="pantries"
     )
 
+    class Meta:
+        verbose_name_plural = "pantries"
+
 
 class StoreIngredient(TimeStampedModel):
     """팬트리 M2M중간관계 Model에 관한 정의"""
