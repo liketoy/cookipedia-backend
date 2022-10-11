@@ -19,7 +19,9 @@ class FoodPost(TimeStampedModel):
     author = models.ForeignKey("users.User", on_delete=models.CASCADE)
     content = models.TextField()
     food = models.ForeignKey(Food, on_delete=models.CASCADE)
-    ingredients = models.ManyToManyField("ingredient.Ingredient", related_name="Foods")
+    ingredients = models.ManyToManyField(
+        "ingredient.Ingredient", related_name="Ingredients"
+    )
 
 
 class PostImage(TimeStampedModel):
