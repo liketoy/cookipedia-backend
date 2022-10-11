@@ -18,3 +18,20 @@
 ### 👩‍🍳👨‍🍳두번째 할 일(2022.10.09까지)
 
 - [x] 코드 리뷰 받은 것을 토대로 새로운 branch에 push 하고 PR 요청하기
+
+### 👩‍🍳👨‍🍳세번째 할 일(2022.10.17까지)
+
+- [ ] admin 페이지 만들기([링크참조](https://github.com/orgs/liketoy/teams/cookipedia/discussions/3))
+
+**시작하기 전 필독 사항**
+⚠️ 두번째 할 일 까지 작성한 branch(ex. hans, daina)를 지우고, 새로운 branch로 시작할 것
+아래 코드 참고
+
+```console
+$ git checkout master
+$ git branch -D [삭제할 branch 이름] ([]는 빼고 작성)
+$ git checkout -b develop
+$ git pull origin develop
+$ git checkout -b feature/admin/[본인 이름] ([]는 빼고 작성)
+$ rm db.sqlite3
+```
