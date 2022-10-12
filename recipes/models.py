@@ -17,3 +17,6 @@ class Recipe(TimeStampedModel):
         "users.User", on_delete=models.CASCADE, related_name="recipes"
     )
     content = models.TextField()
+
+    def __str__(self):
+        return f""
