@@ -54,3 +54,4 @@ class CustomUserAdmin(admin.ModelAdmin):
     )
     list_display = ("username", "email", "name")
     search_fields = ("username", "email", "name")
+    list_filter = ("is_staff", "is_superuser", "is_active")

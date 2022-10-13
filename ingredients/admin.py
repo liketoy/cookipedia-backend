@@ -8,3 +8,4 @@ from .models import Ingredient
 class CustomUserAdmin(admin.ModelAdmin):
     list_display = ("name", "category")
     search_fields = ("name",)
+    list_filter = ("category", )

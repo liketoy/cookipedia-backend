@@ -7,3 +7,4 @@ from .models import Food
 class CustomUserAdmin(admin.ModelAdmin):
     list_display = ("name", "category")
     search_fields = ("name",)
+    list_filter = ("category", )
