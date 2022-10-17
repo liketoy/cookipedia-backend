@@ -1,5 +1,5 @@
 from .models import Food
-
+from django.contrib import admin
 
 @admin.register(Food)
 class FoodAdmin(admin.ModelAdmin):
