@@ -28,7 +28,7 @@ class StoreIngredient(TimeStampedModel):
     pantry = models.ForeignKey(Pantry, on_delete=models.CASCADE)
     ingredient = models.ForeignKey("ingredients.Ingredient", on_delete=models.CASCADE)
     date_bought = models.DateField(null=True, blank=True)
-
+    
     def status_ingredient(self):
         if self.ingredient.expiry_date and self.date_bought:
             if self.date_bought + datetime.timedelta(days=self.ingredient.expiry_date) > now().date():
