@@ -10,6 +10,7 @@ class PantryInline(admin.TabularInline):
         "date_bought",
         "status_ingredient",
     ]
+    readonly_fields = ("status_ingredient",)
 
 
 @admin.register(Pantry)

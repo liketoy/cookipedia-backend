@@ -2,9 +2,8 @@ from django.db import models
 from common.models import TimeStampedModel
 import datetime
 
-from ingredients.models import Ingredient
 
-now = datetime.datetime.today()
+now = datetime.datetime.now().date()
 
 
 class Pantry(TimeStampedModel):
@@ -35,10 +34,11 @@ class StoreIngredient(TimeStampedModel):
         return f"{self.pantry.user}가 산 {self.ingredient}"
 
     def status_ingredient(self):
+        print("zz", self.date_bought)
+        print("zz", self.ingredient.expiry_date)
         if self.date_bought and self.ingredient.expiry_date:
             if (
-                self.date_bought
-                + datetime.datetime.timedelta(days=self.ingredient.expiry_date)
+                self.date_bought + datetime.timedelta(days=self.ingredient.expiry_date)
                 > now
             ):
                 return "😄"
