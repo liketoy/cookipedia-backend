@@ -24,4 +24,4 @@
 -->
 
 ### 희망 리뷰 완료 일 (Expected due date)
-202X. X. X. Wed 
+202X.X.X. Wed 
