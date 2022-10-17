@@ -25,3 +25,4 @@ class CustomUserAdmin(admin.ModelAdmin):
     filter_horizontal = ("ingredients",)
     list_display = ("title", "food", "writer")
     search_fields = ("title", "food__name", "ingredients__name")
+    

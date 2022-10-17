@@ -30,7 +30,7 @@ class StoreIngredient(TimeStampedModel):
     date_bought = models.DateField(null=True, blank=True)
 
     def status_ingredient(self):
-        if self.date_bought:
+        if self.ingredient.expiry_date and self.date_bought:
             if self.date_bought + datetime.timedelta(days=self.ingredient.expiry_date) > now().date():
                 return "😄"
             elif self.date_bought + datetime.timedelta(days=self.ingredient.expiry_date) < now().date():
@@ -41,5 +41,6 @@ class StoreIngredient(TimeStampedModel):
     def __str__(self):
         return f'{self.pantry.user.nickname}님이 산 {self.ingredient}'
     
-    class Meta: # ingredient의 중복 방지
-        unique_together = ('ingredient',)
+    class Meta:  # ingredient의 중복 방지
+        constraints = [models.UniqueConstraint(fields=['ingredient'], name="unique_ingredient")]
+        
