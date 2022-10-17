@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.db import models
 from django.utils import timezone
 from common.models import TimeStampedModel
@@ -27,13 +28,14 @@ class StoreIngredient(TimeStampedModel):
     pantry = models.ForeignKey(Pantry, on_delete=models.CASCADE)
     ingredient = models.ForeignKey("ingredients.Ingredient", on_delete=models.CASCADE)
     date_bought = models.DateField(null=True, blank=True)
+    expiry_date = models.DateField(null=True, blank=True)
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["pantry", "ingredient"], name="pantry_ingredient"
-            ),
-        ]
+    # class Meta:
+    #     constraints = [
+    #         models.UniqueConstraint(
+    #             fields=["pantry", "ingredient"], name="pantry_ingredient"
+    #         ),
+    #     ]
 
     def __str__(self) -> str:
         return f"{self.pantry.user.nickname}님이 산 {self.ingredient}"
@@ -41,11 +43,16 @@ class StoreIngredient(TimeStampedModel):
     def status_ingredient(self):
         if self.ingredient is not None and self.date_bought is not None:
             today = timezone.now().date()
-            if (today - self.date_bought).days < self.ingredient.expiry_date:
+            expiry_date = (
+                self.expiry_date
+                if self.expiry_date is not None
+                else self.date_bought + timedelta(self.ingredient.expiry_date)
+            )  # python 삼항 연산자(ex. print("짝수" if num % 2 == 0 else "홀수"))
+            if today < expiry_date:
                 return "😋"
-            if (today - self.date_bought).days == self.ingredient.expiry_date:
+            if today == expiry_date:
                 return "🙂"
-            if (today - self.date_bought).days > self.ingredient.expiry_date:
+            if today > expiry_date:
                 return "🤮"
         else:
             return ""
