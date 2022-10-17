@@ -1,11 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import User
-# Register your models here.
 
 
 @admin.register(User)
-# class CustomUserAdmin(admin.ModelAdmin):
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (
@@ -22,13 +20,13 @@ class CustomUserAdmin(UserAdmin):
                     "address",
                     "birth_date",
                     "phone_number",
-                )
+                ),
+                "classes": ("wide",),
             },
         ),
         (
             "Permissions",
             {
-                "classes": ("collapse",),
                 "fields": (
                     "is_active",
                     "is_staff",
@@ -36,23 +34,20 @@ class CustomUserAdmin(UserAdmin):
                     "groups",
                     "user_permissions",
                 ),
+                "classes": ("collapse",),
             },
         ),
         (
             "Important Dates",
             {
+                "fields": ("last_login", "date_joined"),
                 "classes": ("collapse",),
-                "fields": (
-                    "last_login",
-                    "date_joined",
-                ),
             },
         ),
     )
-    filter_horizontal = (
-        "groups",
-        "user_permissions",
+
+    list_display = (
+        "username",
+        "email",
+        "name",
     )
-    list_display = ("username", "email", "name")
-    search_fields = ("username", "email", "name")
-    list_filter = ("is_staff", "is_superuser", "is_active")

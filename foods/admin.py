@@ -1,10 +1,12 @@
-from django.contrib import admin
 from .models import Food
-# Register your models here.
 
 
 @admin.register(Food)
-class CustomUserAdmin(admin.ModelAdmin):
+class FoodAdmin(admin.ModelAdmin):
+
+    """Food 어드민에 관한 정의"""
+
     list_display = ("name", "category")
+    list_filter = ("category",)
     search_fields = ("name",)
-    list_filter = ("category", )
+

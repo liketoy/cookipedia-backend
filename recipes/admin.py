@@ -1,28 +1,11 @@
 from django.contrib import admin
-from .models import Recipe
-
-# Register your models here.
+from recipes.models import Recipe
 
 
 @admin.register(Recipe)
-class CustomUserAdmin(admin.ModelAdmin):
-    fieldsets = (
-        (
-            None,
-            {
-                "fields": (
-                    "cover",
-                    "title",
-                    "food",
-                    "ingredients",
-                    "writer",
-                    "content",
-                )
-            },
-        ),
-    )
+class RecipeAdmin(admin.ModelAdmin):
+    """Recipe 어드민에 관한 정의"""
 
-    filter_horizontal = ("ingredients",)
     list_display = ("title", "food", "writer")
-    search_fields = ("title", "food__name", "ingredients__name")
-    
+    search_fields = ("title", "food__name", "ingredient__name")
+    filter_horizontal = ("ingredients",)
