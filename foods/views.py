@@ -14,7 +14,6 @@ from rest_framework import status, viewsets  # status로 상태값 커스텀가�
 #         foodjson = FoodSerializer(foods, many=True).data
 #         print(foodjson)
 #         return Response(foodjson, status.HTTP_200_OK)
-#         return
 
 
 class FoodView(viewsets.ModelViewSet):

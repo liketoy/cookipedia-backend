@@ -47,8 +47,14 @@ class StoreIngredient(TimeStampedModel):
         return f"{self.pantry.user.nickname}님이 산 {self.ingredient}"
 
     def status_ingredient(self):
-        if self.ingredient is not None and self.date_bought is not None:
-            today = timezone.now().date()
+        if (
+            self.ingredient is not None
+            and self.date_bought is not None
+            and (
+                self.expiry_date is not None or self.ingredient.expiry_date is not None
+            )  # 재료가 있을 때, 재료를 산 날짜가 있을 때, 유저가 기입한 재료의 폐기날짜가 있거나, 재료의 폐기날짜 데이터가 있을 때
+        ):
+            today = timezone.localtime(timezone.now()).date()
             expiry_date = (
                 self.expiry_date
                 if self.expiry_date is not None
@@ -61,5 +67,4 @@ class StoreIngredient(TimeStampedModel):
             if today > expiry_date:
                 return "🤮"
         else:
-            return ""
-
+            return "❓"

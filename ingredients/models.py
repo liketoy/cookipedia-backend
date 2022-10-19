@@ -20,7 +20,7 @@ class Ingredient(TimeStampedModel):
 
     category = models.CharField(choices=INGREDIENT_CATEGORY_CHOICES, max_length=40)
     name = models.CharField(max_length=40, unique=True)
-    expiry_date = models.PositiveIntegerField(blank=True)
+    expiry_date = models.PositiveIntegerField(blank=True, null=True)
     preservation = models.CharField(max_length=80)
 
     def __str__(self) -> str:
