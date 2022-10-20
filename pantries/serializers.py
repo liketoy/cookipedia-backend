@@ -2,7 +2,7 @@ from datetime import timedelta
 from rest_framework import serializers
 from django.utils import timezone
 from pantries import models
-from users.serializers import TinyUserSerializer
+from users.serializers import TinyRelatedUserSerializer
 
 
 class StoreIngredientSerializer(serializers.ModelSerializer):
@@ -61,7 +61,7 @@ class ReadOnlyStoreIngredientSerializer(serializers.ModelSerializer):
 
 
 class PantrySerializer(serializers.ModelSerializer):
-    user = TinyUserSerializer(read_only=True)
+    user = TinyRelatedUserSerializer(read_only=True)
     ingredients = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
