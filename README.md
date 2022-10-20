@@ -28,9 +28,8 @@
 ⚠️ 마지막 작업한 branch를 지우고, 새로운 branch로 시작할 것. 아래 코드 참고
 
 ```console
-$ git checkout master
+$ git checkout develop
 $ git branch -D [삭제할 branch 이름] ([]는 빼고 작성)
-$ git checkout -b develop
 $ git pull origin develop
 $ git checkout -b feature/admin/[본인 이름] ([]는 빼고 작성)
 $ rm db.sqlite3
