@@ -3,7 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate, login, logout
-from users import serializers
+from users import serializers, models
+from common.utils import slug_to_nickname
 
 
 class MeView(APIView):
@@ -94,3 +95,14 @@ class ChangePasswordView(APIView):
             return Response({"ok": "변경완료"})
         else:
             raise exceptions.ParseError("비밀번호가 틀립니다.")
+
+
+class PublicUserView(APIView):
+    def get(self, request, nickname):
+        slug_nickname = slug_to_nickname(nickname)
+        try:
+            user = models.User.objects.get(nickname=slug_nickname)
+        except models.User.DoesNotExist:
+            raise exceptions.NotFound
+        serializer = serializers.PrivateUserSerializer(user)
+        return Response(serializer.data)
