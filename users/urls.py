@@ -10,5 +10,4 @@ urlpatterns = [
     path("login", views.LogInView.as_view()),
     path("logout", views.LogOutView.as_view()),
     path("password", views.ChangePasswordView.as_view()),
-    path("@<str:nickname>", views.PublicUserView.as_view()),
 ]
