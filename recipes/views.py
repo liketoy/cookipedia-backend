@@ -48,7 +48,7 @@ class RecipeDetailView(APIView):
         try:
             recipe = models.Recipe.objects.get(id=pk)
         except models.Recipe.DoesNotExist:
-            raise exceptions.ParseError("등록되지 않는 레시피입니다.")
+            raise exceptions.ParseError("등록되지 않은 레시피입니다.")
         serializer = serializers.RecipeSerializer(recipe)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
