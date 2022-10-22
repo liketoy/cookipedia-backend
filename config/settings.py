@@ -38,7 +38,6 @@ ALLOWED_HOSTS = []
 THIRD_PARTY_APPS = [
     "rest_framework",
     # 회원가입
-    "rest_framework.authtoken",
 ]
 
 CUSTOM_APPS = [
@@ -48,7 +47,6 @@ CUSTOM_APPS = [
     "ingredients.apps.IngredientsConfig",
     "pantries.apps.PantriesConfig",
     "recipes.apps.RecipesConfig",
-    "api.apps.ApiConfig",
 ]
 
 SYSTEM_APPS = [
@@ -62,11 +60,6 @@ SYSTEM_APPS = [
 
 INSTALLED_APPS = SYSTEM_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
 
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.TokenAuthentication",
-    ]
-}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
