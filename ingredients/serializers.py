@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from ingredients import models
+from .models import Ingredient
 
 
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Ingredient
+        model = Ingredient
         fields = (
-            "pk",
+            "id",
             "category",
             "name",
             "expiry_date",
