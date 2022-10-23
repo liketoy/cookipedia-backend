@@ -1,12 +1,12 @@
 from django.urls import path
-from foods import views
+from recipes import views
 
-app_name = "foods"
+app_name = "recipes"
 
 urlpatterns = [
     path(
         "",
-        views.FoodViewSet.as_view(
+        views.RecipeViewSet.as_view(
             {
                 "get": "list",
                 "post": "create",
@@ -15,7 +15,7 @@ urlpatterns = [
     ),
     path(
         "<int:pk>",
-        views.FoodViewSet.as_view(
+        views.RecipeViewSet.as_view(
             {
                 "get": "retrieve",
                 "put": "partial_update",
@@ -23,5 +23,4 @@ urlpatterns = [
             }
         ),
     ),
-    path("search", views.FoodViewSet.as_view({"get": "search"})),
 ]

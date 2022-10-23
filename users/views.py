@@ -3,7 +3,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate, login, logout
-from users import serializers
+from common.utils import slug_to_name
+from users import serializers, models
+from users.permissions import IsLogOut
 
 
 class MeView(APIView):
@@ -34,6 +36,8 @@ class MeView(APIView):
 
 
 class SignUpView(APIView):
+    permission_classes = [IsLogOut]
+
     def post(self, request):
         password = request.data.get("password")
         if not password:
@@ -50,6 +54,9 @@ class SignUpView(APIView):
 
 
 class LogInView(APIView):
+
+    permission_classes = [IsLogOut]
+
     def post(self, request):
         username = request.data.get("username")
         password = request.data.get("password")
@@ -94,3 +101,17 @@ class ChangePasswordView(APIView):
             return Response({"ok": "변경완료"})
         else:
             raise exceptions.ParseError("비밀번호가 틀립니다.")
+
+
+class PublicUserView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, nickname):
+        slug_nickname = slug_to_name(nickname)
+        try:
+            user = models.User.objects.get(nickname=slug_nickname)
+        except models.User.DoesNotExist:
+            raise exceptions.NotFound
+        serializer = serializers.PrivateUserSerializer(user)
+        return Response(serializer.data)

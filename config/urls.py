@@ -24,6 +24,7 @@ urlpatterns = [
     path("api/ingredients/", include("ingredients.urls")),
     path("api/foods/", include("foods.urls")),
     path("api/pantries/", include("pantries.urls")),
+    path("api/recipes/", include("recipes.urls")),
 ]
 
 if settings.DEBUG:

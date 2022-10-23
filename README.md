@@ -25,7 +25,7 @@
 
 ### 👩‍🍳👨‍🍳네번째 할 일(2022.10.24까지)
 
-- [ ] api 만들기([링크참조](https://github.com/orgs/liketoy/teams/cookipedia/discussions/4))
+- [x] api 만들기([링크참조](https://github.com/orgs/liketoy/teams/cookipedia/discussions/4))
 
 ## 새로운 할 일을 시작하기 전 필독 사항
 
