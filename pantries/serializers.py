@@ -1,5 +1,6 @@
 from datetime import timedelta
-from rest_framework import serializers
+from rest_framework import serializers, exceptions
+from django.core.paginator import Paginator
 from django.utils import timezone
 from pantries import models
 from users.serializers import TinyRelatedUserSerializer
@@ -65,5 +66,17 @@ class PantrySerializer(serializers.ModelSerializer):
         fields = ("user", "ingredients")
 
     def get_ingredients(self, obj):
-        queryset = models.StoreIngredient.objects.filter(pantry=obj)
-        return [StoreIngredientSerializer(ingredient).data for ingredient in queryset]
+        request = self.context.get("request")
+        queryset = models.StoreIngredient.objects.filter(pantry=obj).order_by(
+            "created_at"
+        )
+        page_size = request.query_params.get("page_size", 10)
+        page = request.query_params.get("page", 1)
+        try:
+            paginator = Paginator(queryset, page_size)
+            result = paginator.page(page)
+            serializer = StoreIngredientSerializer(result, many=True)
+
+            return {"count": queryset.count(), "results": serializer.data}
+        except Exception as e:
+            raise exceptions.ParseError(e)

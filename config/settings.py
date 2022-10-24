@@ -147,3 +147,10 @@ AUTH_USER_MODEL = "users.User"
 MEDIA_ROOT = BASE_DIR / "uploads"
 
 MEDIA_URL = "/media/"
+
+
+# DRF
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "common.paginators.CustomResultsSetPagination",
+    "PAGE_SIZE": 100,
+}

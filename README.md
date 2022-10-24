@@ -27,6 +27,15 @@
 
 - [x] api 만들기([링크참조](https://github.com/orgs/liketoy/teams/cookipedia/discussions/4))
 
+- [ ] Pagination
+- [ ] Permissions
+- [ ] APIView -> ViewSet
+- [ ] API Docs
+
+### 👩‍🍳👨‍🍳다섯번째 할 일(2022.10.31까지)
+
+- [ ] ingredient db category 정리
+
 ## 새로운 할 일을 시작하기 전 필독 사항
 
 ⚠️ 마지막 작업한 branch를 지우고, 새로운 branch로 시작할 것. 아래 코드 참고

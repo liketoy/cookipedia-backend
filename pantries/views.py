@@ -22,7 +22,8 @@ class MyPantryView(APIView):
     def get(self, request):
         user = request.user
         pantry, _ = models.Pantry.objects.get_or_create(user=user)
-        serializer = serializers.PantrySerializer(pantry)
+        serializer = serializers.PantrySerializer(pantry, context={"request": request})
+
         return Response(serializer.data)
 
     def post(self, request):
@@ -47,7 +48,7 @@ class MyPantryView(APIView):
         return Response(serializer.data)
 
 
-class RemoveIngredientInPantryView(APIView):
+class StoreIngredientInPantryView(APIView):
     def put(self, request, pk):
         try:
             ingredient = models.StoreIngredient.objects.get(pk=pk)

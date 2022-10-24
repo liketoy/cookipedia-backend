@@ -22,9 +22,12 @@ class IngredientViewSet(ModelViewSet):
         if category is not None:
             category = category.replace("-", ", ")
             filter_kwargs["category"] = category
+        paginator = self.paginator
         ingredients = self.queryset.filter(**filter_kwargs)
-        serializer = self.get_serializer(ingredients, many=True)
-        return Response(serializer.data)
+        results = paginator.paginate_queryset(ingredients, request)
+        serializer = self.get_serializer(results, many=True)
+
+        return paginator.get_paginated_response(serializer.data)
 
     @action(detail=False, methods=["get"])
     def search(self, request):
