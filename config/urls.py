@@ -16,10 +16,15 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/users/", include("users.urls")),
+    path("api/ingredients/", include("ingredients.urls")),
+    path("api/foods/", include("foods.urls")),
+    path("api/pantries/", include("pantries.urls")),
+    path("api/recipes/", include("recipes.urls")),
 ]
 
 if settings.DEBUG:

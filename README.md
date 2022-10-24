@@ -2,7 +2,7 @@
 
 ## 설명
 
-재료를 검색하면 그에 맞는 자취생 요리를 레시피와 함께 보여주는 사이트(Daina)
+내가 가지고 있는 재료들로 만들 수 있는 레시피를 추천받는 서비스
 
 ## 부가기능
 
@@ -22,6 +22,19 @@
 ### 👩‍🍳👨‍🍳세번째 할 일(2022.10.17까지)
 
 - [x] admin 페이지 만들기([링크참조](https://github.com/orgs/liketoy/teams/cookipedia/discussions/3))
+
+### 👩‍🍳👨‍🍳네번째 할 일(2022.10.24까지)
+
+- [x] api 만들기([링크참조](https://github.com/orgs/liketoy/teams/cookipedia/discussions/4))
+
+- [ ] Pagination
+- [ ] Permissions
+- [ ] APIView -> ViewSet
+- [ ] API Docs
+
+### 👩‍🍳👨‍🍳다섯번째 할 일(2022.10.31까지)
+
+- [ ] ingredient db category 정리
 
 ## 새로운 할 일을 시작하기 전 필독 사항
 
