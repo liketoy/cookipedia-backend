@@ -27,14 +27,10 @@
 
 - [x] api 만들기([링크참조](https://github.com/orgs/liketoy/teams/cookipedia/discussions/4))
 
-- [ ] Pagination
-- [ ] Permissions
-- [ ] APIView -> ViewSet
-- [ ] API Docs
-
 ### 👩‍🍳👨‍🍳다섯번째 할 일(2022.10.31까지)
 
-- [ ] ingredient db category 정리
+- [ ] ingredient db 웹스크랩핑([링크참조](https://sauce.foodpolis.kr/home/specialty/foodDbSearch.do?PAGE_MN_ID=SIS-030101))
+- [ ] food db 웹스크랩핑
 
 ## 새로운 할 일을 시작하기 전 필독 사항
 
@@ -44,6 +40,6 @@
 $ git checkout develop
 $ git branch -D [삭제할 branch 이름] ([]는 빼고 작성)
 $ git pull origin develop
-$ git checkout -b feature/admin/[본인 이름] ([]는 빼고 작성)
+$ git checkout -b [새로 만들 branch 이름] ([]는 빼고 작성)
 $ rm db.sqlite3
 ```
