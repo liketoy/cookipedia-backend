@@ -50,9 +50,7 @@ class PantryIngredientUpdateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):
-        user = request.user
-        pantry = Pantry.objects.get(user=user)
-        queryset = StoreIngredient.objects.filter(pantry=pantry)
+        queryset = StoreIngredient.objects.get(pk=pk)
 
         if queryset.filter(pk=pk).exists():
             ingredient = queryset.get(pk=pk)
@@ -64,10 +62,8 @@ class PantryIngredientUpdateView(APIView):
     # 로그인한 유저의 팬트리에 담긴 재료의 값 수정전 조회
 
     def put(self, request, pk):
-        user = request.user
-        pantry = Pantry.objects.get(user=user)
-        queryset = StoreIngredient.objects.filter(pantry=pantry)
-        ingredient = queryset.get(pk=pk)
+        ingredient = StoreIngredient.objects.get(pk=pk)
+
         serializer = serializers.ReadOnlyStoreIngredientSerializer(
             ingredient, data=request.data, partial=True
         )

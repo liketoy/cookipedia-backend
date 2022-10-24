@@ -1,16 +1,19 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from . import serializers
 from .models import Ingredient
 
 
 # Create your views here.
 class IngredientView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
     def get(self, request):
         if "category" not in request.GET:
             return Response({"분류항목을 입력하세요"})
-        category = request.GET["category"]
+        category = request.GET["category"].replace("-", ", ")
+        print(category)
         queryset = Ingredient.objects.filter(category=category)
         if not queryset:
             return Response({"해당 분류항복인 재료는 없습니다."})
@@ -20,17 +23,13 @@ class IngredientView(APIView):
     # 재료 리스트 조회 (category값에 따라 다름)
 
     def post(self, request):
-        user = request.user
-        if user.is_authenticated:
-            serializer = serializers.IngredientSerializer(data=request.data)
-            if serializer.is_valid():
-                ingredient = serializer.save()
-                serializer = serializers.IngredientSerializer(ingredient)
-                return Response(serializer.data)
-            else:
-                return Response(serializer.errors)
+        serializer = serializers.IngredientSerializer(data=request.data)
+        if serializer.is_valid():
+            ingredient = serializer.save()
+            serializer = serializers.IngredientSerializer(ingredient)
+            return Response(serializer.data)
         else:
-            return Response({"권한이 없습니다."})
+            return Response(serializer.errors)
 
     # 재료 생성
 
@@ -69,11 +68,10 @@ class IngredientDetailView(APIView):
 
 class SearchIngredientView(APIView):
     def get(self, request):
-        if "q" not in request.GET:
+        q = request.GET.get("q", None)
+        if q is None:
             return Response({"검색어를 입력하세요"})
-        q = request.GET["q"]
-        print(q)
-        queryset = Ingredient.objects.all().filter(name__contains=q)
+        queryset = Ingredient.objects.filter(name__contains=q)
         if not queryset:
             return Response({"그런 재료 없습니다."})
         serializer = serializers.IngredientSerializer(queryset, many=True)
