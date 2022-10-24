@@ -49,15 +49,17 @@ class MyPantryView(APIView):
 class PantryIngredientUpdateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    # def get(self, request, pk):
-    #     user = request.user
-    #     pantry = Pantry.objects.get(user=user)
-    #     queryset = StoreIngredient.objects.filter(pantry=pantry)
-    #     for ingredient in queryset:
-    #         if ingredient.pk == pk:
-    #             serializer = serializers.ReadOnlyStoreIngredientSerializer(ingredient)
-    #             return Response(serializer.data)
-    #     return Response({"니 장바구니에 없는 재료임."})
+    def get(self, request, pk):
+        user = request.user
+        pantry = Pantry.objects.get(user=user)
+        queryset = StoreIngredient.objects.filter(pantry=pantry)
+
+        if queryset.filter(pk=pk).exists():
+            ingredient = queryset.get(pk=pk)
+            serializer = serializers.ReadOnlyStoreIngredientSerializer(ingredient)
+            return Response(serializer.data)
+        else:
+            return Response({"니 장바구니에 없는 재료임."})
 
     # 로그인한 유저의 팬트리에 담긴 재료의 값 수정전 조회
 
@@ -65,11 +67,10 @@ class PantryIngredientUpdateView(APIView):
         user = request.user
         pantry = Pantry.objects.get(user=user)
         queryset = StoreIngredient.objects.filter(pantry=pantry)
-        for ingredient in queryset:
-            if ingredient.pk == pk:
-                serializer = serializers.ReadOnlyStoreIngredientSerializer(
-                    ingredient, data=request.data, partial=True
-                )
+        ingredient = queryset.get(pk=pk)
+        serializer = serializers.ReadOnlyStoreIngredientSerializer(
+            ingredient, data=request.data, partial=True
+        )
         if serializer.is_valid():
             edited_pantry_ingredient = serializer.save()
             serializer = serializers.ReadOnlyStoreIngredientSerializer(
@@ -85,9 +86,8 @@ class PantryIngredientUpdateView(APIView):
         user = request.user
         pantry = Pantry.objects.get(user=user)
         queryset = StoreIngredient.objects.filter(pantry=pantry)
-        for ingredient in queryset:
-            if ingredient.pk == pk:
-                ingredient.delete()
-                return Response({"delete success"})
+        ingredient = queryset.get(pk=pk)
+        ingredient.delete()
+        return Response({"delete success"})
 
     # 로그인한 유저의 재료 삭제
