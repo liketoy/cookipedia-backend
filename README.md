@@ -39,7 +39,13 @@
 ```console
 $ git checkout develop
 $ git branch -D [삭제할 branch 이름] ([]는 빼고 작성)
+$ git push origin --delete [삭제할 원격저장소 branch 이름] ([]는 빼고 작성)
 $ git pull origin develop
 $ git checkout -b [새로 만들 branch 이름] ([]는 빼고 작성)
+
+# 만약, pull 해 올 branch에 model을 수정한 이슈가 있다면
 $ rm db.sqlite3
+$ python manage.py makemigrations
+$ python manage.py migrate
+$ python manage.py createsuperuser
 ```
