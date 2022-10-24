@@ -40,7 +40,7 @@ class StoreIngredient(TimeStampedModel):
     def __str__(self) -> str:
         return f"{self.pantry.user.nickname}님이 산 {self.ingredient}"
 
-    def status_ingredient(self):
+    def is_status(self):
         if (
             self.ingredient is not None
             and self.date_bought is not None

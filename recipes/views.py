@@ -1,5 +1,4 @@
 from rest_framework import permissions
-from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from django.db.models import Q
 from recipes import models, serializers
@@ -7,7 +6,7 @@ from recipes.permissions import IsWriter
 
 
 class RecipeViewSet(ModelViewSet):
-    queryset = models.Recipe.objects.all()
+    queryset = models.Recipe.objects.all().order_by("-created_at")
     serializer_class = serializers.RecipeSerializer
 
     def get_permissions(self):
@@ -28,11 +27,15 @@ class RecipeViewSet(ModelViewSet):
             recipes = (
                 self.get_queryset()
                 .filter(
-                    Q(title__icontains=q) | Q(food__name=q) | Q(ingredients__name=q)
+                    Q(title__icontains=q)
+                    | Q(food__icontains=q)
+                    | Q(ingredients__icontains=q)
                 )
                 .distinct()
             )
         else:
             recipes = self.get_queryset()
-        serializer = self.get_serializer(recipes, many=True)
-        return Response(serializer.data)
+        paginator = self.paginator
+        results = paginator.paginate_queryset(recipes, request)
+        serializer = self.get_serializer(results, many=True)
+        return paginator.get_paginated_response(serializer.data)

@@ -4,7 +4,7 @@ from pantries.models import StoreIngredient, Pantry
 
 class StoreIngredientInline(admin.TabularInline):
     model = StoreIngredient
-    readonly_fields = ("status_ingredient",)
+    readonly_fields = ("is_status",)
 
 
 @admin.register(Pantry)

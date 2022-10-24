@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from common.utils import slug_to_name
 from users import serializers, models
 from users.permissions import IsLogOut
+from pantries.models import Pantry
 
 
 class MeView(APIView):
@@ -47,6 +48,7 @@ class SignUpView(APIView):
             user = serializer.save()
             user.set_password(password)
             user.save()
+            Pantry.objects.create(user=user)
             user_serializer = serializers.PrivateUserSerializer(user)
             return Response(user_serializer.data)
         else:
@@ -111,7 +113,7 @@ class PublicUserView(APIView):
         slug_nickname = slug_to_name(nickname)
         try:
             user = models.User.objects.get(nickname=slug_nickname)
+            serializer = serializers.PrivateUserSerializer(user)
+            return Response(serializer.data)
         except models.User.DoesNotExist:
             raise exceptions.NotFound
-        serializer = serializers.PrivateUserSerializer(user)
-        return Response(serializer.data)

@@ -18,12 +18,11 @@ class IngredientViewSet(ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         category = request.GET.get("category", None)
-        filter_kwargs = {}
-        if category is not None:
-            category = category.replace("-", ", ")
-            filter_kwargs["category"] = category
+        if category is None:
+            raise exceptions.ParseError("category 값이 비어있습니다.")
+        category = category.replace("-", ", ")
+        ingredients = self.queryset.filter(category=category).order_by("name")
         paginator = self.paginator
-        ingredients = self.queryset.filter(**filter_kwargs)
         results = paginator.paginate_queryset(ingredients, request)
         serializer = self.get_serializer(results, many=True)
 

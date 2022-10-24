@@ -1,4 +1,3 @@
-from datetime import timedelta
 from rest_framework import serializers, exceptions
 from django.core.paginator import Paginator
 from django.utils import timezone
@@ -8,7 +7,7 @@ from ingredients.serializers import TinyIngredientSerializer
 
 
 class StoreIngredientSerializer(serializers.ModelSerializer):
-    status_ingredient = serializers.SerializerMethodField(read_only=True)
+    is_status = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = models.StoreIngredient
@@ -17,31 +16,11 @@ class StoreIngredientSerializer(serializers.ModelSerializer):
             "ingredient",
             "date_bought",
             "expiry_date",
-            "status_ingredient",
+            "is_status",
         )
 
-    def get_status_ingredient(self, obj):
-        if (
-            obj.ingredient is not None
-            and obj.date_bought is not None
-            and (
-                obj.expiry_date is not None or obj.ingredient.expiry_date is not None
-            )  # 재료가 있을 때, 재료를 산 날짜가 있을 때, 유저가 기입한 재료의 폐기날짜가 있거나, 재료의 폐기날짜 데이터가 있을 때
-        ):
-            today = timezone.localtime(timezone.now()).date()
-            expiry_date = (
-                obj.expiry_date
-                if obj.expiry_date is not None
-                else obj.date_bought + timedelta(obj.ingredient.expiry_date)
-            )  # python 삼항 연산자(ex. print("짝수" if num % 2 == 0 else "홀수"))
-            if today < expiry_date:
-                return "😋"
-            if today == expiry_date:
-                return "🙂"
-            if today > expiry_date:
-                return "🤮"
-        else:
-            return "❓"
+    def get_is_status(self, obj):
+        return self.Meta.model.is_status(obj)
 
     def to_representation(self, instance):
         response = super().to_representation(instance)

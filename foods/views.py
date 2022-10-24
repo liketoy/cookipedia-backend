@@ -19,13 +19,15 @@ class FoodViewSet(ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         category = request.GET.get("category", None)
-        filter_kwargs = {}
-        if category is not None:
-            category = slug_to_name(category)
-            filter_kwargs["category"] = category
-        foods = self.queryset.filter(**filter_kwargs)
-        serializer = self.get_serializer(foods, many=True)
-        return Response(serializer.data)
+        if category is None:
+            raise exceptions.ParseError("category 값이 비어있습니다.")
+        category = slug_to_name(category)
+        foods = self.queryset.filter(category=category).order_by("name")
+        paginator = self.paginator
+        results = paginator.paginate_queryset(foods, request)
+        serializer = self.get_serializer(results, many=True)
+
+        return paginator.get_paginated_response(serializer.data)
 
     @action(detail=False, methods=["get"])
     def search(self, request):

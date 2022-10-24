@@ -1,19 +1,24 @@
 from rest_framework import status, exceptions
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from common.utils import slug_to_name
+from common.paginators import CustomResultsSetPagination
 from pantries import models, serializers
 from users.models import User
 
 
 class PantryView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminUser]
 
     def get(self, request):
         pantry = models.Pantry.objects.all()
-        serializer = serializers.PantrySerializer(pantry, many=True)
-        return Response(serializer.data)
+        paginator = CustomResultsSetPagination()
+        results = paginator.paginate_queryset(pantry, request)
+        serializer = serializers.PantrySerializer(
+            results, many=True, context={"request": request}
+        )
+        return paginator.get_paginated_response(serializer.data)
 
 
 class MyPantryView(APIView):
@@ -21,9 +26,8 @@ class MyPantryView(APIView):
 
     def get(self, request):
         user = request.user
-        pantry, _ = models.Pantry.objects.get_or_create(user=user)
+        pantry = user.pantry
         serializer = serializers.PantrySerializer(pantry, context={"request": request})
-
         return Response(serializer.data)
 
     def post(self, request):
@@ -33,7 +37,9 @@ class MyPantryView(APIView):
             pantry = user.pantry
             try:
                 serializer.save(pantry=pantry)
-                serializer = serializers.PantrySerializer(pantry)
+                serializer = serializers.PantrySerializer(
+                    pantry, context={"request": request}
+                )
                 return Response(serializer.data)
             except Exception as e:
                 raise exceptions.ParseError(e)
@@ -44,11 +50,26 @@ class MyPantryView(APIView):
         user = request.user
         pantry = user.pantry
         pantry.ingredients.clear()
-        serializer = serializers.PantrySerializer(pantry)
+        serializer = serializers.PantrySerializer(pantry, context={"request": request})
+        return Response(serializer.data)
+
+    def patch(self, request):
+        store_ingredients = request.data.get("ingredients")
+        user = request.user
+        pantry = user.pantry
+        ingredients = models.StoreIngredient.objects.filter(
+            pk__in=store_ingredients, pantry=pantry
+        )
+        if ingredients.exists():
+            ingredients.delete()
+        serializer = serializers.PantrySerializer(pantry, context={"request": request})
         return Response(serializer.data)
 
 
 class StoreIngredientInPantryView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
     def put(self, request, pk):
         try:
             ingredient = models.StoreIngredient.objects.get(pk=pk)
@@ -80,11 +101,10 @@ class PublicPantryView(APIView):
         name = slug_to_name(nickname)
         try:
             user = User.objects.get(nickname=name)
+            pantry = user.pantry
+            serializer = serializers.PantrySerializer(
+                pantry, context={"request": request}
+            )
+            return Response(serializer.data)
         except User.DoesNotExist:
             raise exceptions.NotFound
-        try:
-            pantry = user.pantry
-        except models.Pantry.DoesNotExist:
-            raise exceptions.NotFound
-        serializer = serializers.PantrySerializer(pantry)
-        return Response(serializer.data)
