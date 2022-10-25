@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import exceptions
 from . import serializers
 from .models import Pantry, StoreIngredient
 
@@ -41,7 +42,7 @@ class MyPantryView(APIView):
     def put(self, request):
         pantry_ingredients = request.user.pantry.ingredients
         pantry_ingredients.clear()
-        return Response({"delete all products"})
+        return Response({"delete": "ok"})
 
     # 로그인한 유저의 팬트리에 담긴 재료들 전체 비우기
 
@@ -50,40 +51,44 @@ class PantryIngredientUpdateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):
-        queryset = StoreIngredient.objects.get(pk=pk)
-
-        if queryset.filter(pk=pk).exists():
-            ingredient = queryset.get(pk=pk)
+        try:
+            ingredient = StoreIngredient.objects.get(pk=pk)
             serializer = serializers.ReadOnlyStoreIngredientSerializer(ingredient)
             return Response(serializer.data)
-        else:
-            return Response({"니 장바구니에 없는 재료임."})
+        except StoreIngredient.DoesNotExist:
+            raise exceptions.NotFound("장바구니에 없는 재료입니다.")
 
     # 로그인한 유저의 팬트리에 담긴 재료의 값 수정전 조회
 
     def put(self, request, pk):
-        ingredient = StoreIngredient.objects.get(pk=pk)
+        try:
+            ingredient = StoreIngredient.objects.get(pk=pk)
 
-        serializer = serializers.ReadOnlyStoreIngredientSerializer(
-            ingredient, data=request.data, partial=True
-        )
-        if serializer.is_valid():
-            edited_pantry_ingredient = serializer.save()
             serializer = serializers.ReadOnlyStoreIngredientSerializer(
-                edited_pantry_ingredient
+                ingredient, data=request.data, partial=True
             )
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors)
+            if serializer.is_valid():
+                edited_pantry_ingredient = serializer.save()
+                serializer = serializers.ReadOnlyStoreIngredientSerializer(
+                    edited_pantry_ingredient
+                )
+                return Response(serializer.data)
+            else:
+                return Response(serializer.errors)
+        except StoreIngredient.DoesNotExist:
+            raise exceptions.NotFound("장바구니에 없는 재료입니다.")
 
     # 로그인한 유저의 팬트리에 담긴 재료의 값 수정
 
     def delete(self, request, pk):
-        user = request.user
-        pantry = Pantry.objects.get(user=user)
-        queryset = StoreIngredient.objects.filter(pantry=pantry)
-        ingredient = queryset.get(pk=pk)
-        ingredient.delete()
-        return Response({"delete success"})
+        try:
+            user = request.user
+            pantry = Pantry.objects.get(user=user)
+            queryset = StoreIngredient.objects.filter(pantry=pantry)
+            ingredient = queryset.get(pk=pk)
+            ingredient.delete()
+            return Response({"delete": "ok"})
+        except StoreIngredient.DoesNotExist:
+            raise exceptions.NotFound("장바구니에 없는 재료입니다.")
 
     # 로그인한 유저의 재료 삭제

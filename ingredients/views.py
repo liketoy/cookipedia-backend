@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework import exceptions
 from . import serializers
 from .models import Ingredient
 
@@ -10,13 +11,13 @@ class IngredientView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request):
-        if "category" not in request.GET:
-            return Response({"분류항목을 입력하세요"})
-        category = request.GET["category"].replace("-", ", ")
-        print(category)
+        category = request.GET.get("category", None)
+        if not category:
+            raise exceptions.ParseError("분류항목을 입력하세요.")
+        category = category.replace("-", ", ")
         queryset = Ingredient.objects.filter(category=category)
         if not queryset:
-            return Response({"해당 분류항복인 재료는 없습니다."})
+            raise exceptions.NotFound("해당 분류 항목의 재료는 없습니다.")
         serializer = serializers.IngredientSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -38,30 +39,39 @@ class IngredientDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):
-        ingredient_detail = Ingredient.objects.get(id=pk)
-        serializer = serializers.IngredientSerializer(ingredient_detail)
-        return Response(serializer.data)
+        try:
+            ingredient_detail = Ingredient.objects.get(id=pk)
+            serializer = serializers.IngredientSerializer(ingredient_detail)
+            return Response(serializer.data)
+        except Ingredient.DoesNotExist:
+            raise exceptions.NotFound("등록되지 않은 재료입니다.")
 
     # 재료 정보 조회
 
     def put(self, request, pk):
-        ingredient_detail = Ingredient.objects.get(id=pk)
-        serializer = serializers.IngredientSerializer(
-            ingredient_detail, data=request.data, partial=True
-        )
-        if serializer.is_valid():
-            edited_ingredient = serializer.save()
-            serializer = serializers.IngredientSerializer(edited_ingredient)
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors)
+        try:
+            ingredient_detail = Ingredient.objects.get(id=pk)
+            serializer = serializers.IngredientSerializer(
+                ingredient_detail, data=request.data, partial=True
+            )
+            if serializer.is_valid():
+                edited_ingredient = serializer.save()
+                serializer = serializers.IngredientSerializer(edited_ingredient)
+                return Response(serializer.data)
+            else:
+                return Response(serializer.errors)
+        except Ingredient.DoesNotExist:
+            raise exceptions.NotFound("등록되지 않은 재료입니다.")
 
     # 재료 정보 수정
 
     def delete(self, request, pk):
-        ingredient_detail = Ingredient.objects.get(id=pk)
-        ingredient_detail.delete()
-        return Response({"ok": True})
+        try:
+            ingredient_detail = Ingredient.objects.get(id=pk)
+            ingredient_detail.delete()
+            return Response({"ok": True})
+        except Ingredient.DoesNotExist:
+            raise exceptions.NotFound("등록되지 않은 재료입니다.")
 
     # 재료 삭제
 
