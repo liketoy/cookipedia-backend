@@ -7,6 +7,7 @@ from common.paginators import CustomResultsSetPagination
 from pantries import models, serializers
 from users.models import User
 from pantries.permissions import IsOwner
+from django.shortcuts import get_object_or_404
 
 
 class PantryView(APIView):
@@ -71,26 +72,37 @@ class StoreIngredientInPantryView(APIView):
 
     permission_classes = [IsOwner]
 
+    def get_object(self):
+        obj = get_object_or_404(models.Pantry, user=self.request.user)
+        self.check_object_permissions(self.request, obj)
+        return obj
+
     def put(self, request, pk):
         try:
-            ingredient = models.StoreIngredient.objects.get(pk=pk)
-            serializer = serializers.StoreIngredientSerializer(
-                ingredient, data=request.data, partial=True
-            )
-            if serializer.is_valid():
-                serializer.save()
-                pantry_serializer = serializers.PantrySerializer(request.user.pantry)
-                return Response(pantry_serializer.data)
-            else:
-                return Response(serializer.errors)
+            pantry = self.get_object()
+            if pantry:
+                ingredient = models.StoreIngredient.objects.get(pk=pk)
+                serializer = serializers.StoreIngredientSerializer(
+                    ingredient, data=request.data, partial=True
+                )
+                if serializer.is_valid():
+                    serializer.save()
+                    pantry_serializer = serializers.PantrySerializer(
+                        request.user.pantry
+                    )
+                    return Response(pantry_serializer.data)
+                else:
+                    return Response(serializer.errors)
         except models.StoreIngredient.DoesNotExist:
             raise exceptions.NotFound
 
     def delete(self, request, pk):
         try:
-            ingredient = models.StoreIngredient.objects.get(pk=pk)
-            ingredient.delete()
-            return Response({"ok": True})
+            pantry = self.get_object()
+            if pantry:
+                ingredient = models.StoreIngredient.objects.get(pk=pk)
+                ingredient.delete()
+                return Response({"ok": True})
         except models.StoreIngredient.DoesNotExist:
             raise exceptions.NotFound
 
