@@ -6,6 +6,7 @@ from common.utils import slug_to_name
 from common.paginators import CustomResultsSetPagination
 from pantries import models, serializers
 from users.models import User
+from pantries.permissions import IsOwner
 
 
 class PantryView(APIView):
@@ -68,7 +69,7 @@ class MyPantryView(APIView):
 
 class StoreIngredientInPantryView(APIView):
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsOwner]
 
     def put(self, request, pk):
         try:
