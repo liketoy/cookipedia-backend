@@ -26,3 +26,4 @@ class User(AbstractUser):
     phone_number = models.CharField(
         validators=[phoneNumberReg], max_length=11, unique=True
     )
+

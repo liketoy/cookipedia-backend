@@ -17,3 +17,6 @@ class Recipe(TimeStampedModel):
         "users.User", on_delete=models.CASCADE, related_name="recipes"
     )
     content = models.TextField()
+    likes_user = models.ManyToManyField(
+        "users.User", related_name="likes_user", blank=True
+    )

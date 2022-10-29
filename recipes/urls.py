@@ -23,4 +23,6 @@ urlpatterns = [
             }
         ),
     ),
+    path("recommendations", views.RecipeRecommendationView.as_view()),
+    path("<int:id>/likes", views.RecipeLikeView.as_view()),
 ]

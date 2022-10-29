@@ -46,14 +46,14 @@ class MyPantryView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def put(self, request):
+    def put(self, request): # 팬트리 전체 비우기
         user = request.user
         pantry = user.pantry
         pantry.ingredients.clear()
         serializer = serializers.PantrySerializer(pantry, context={"request": request})
         return Response(serializer.data)
 
-    def patch(self, request):
+    def patch(self, request): # 팬트리 부분 비우기
         store_ingredients = request.data.get("ingredients")
         user = request.user
         pantry = user.pantry
