@@ -11,7 +11,7 @@ class Notification(TimeStampedModel):
         COOKING = ("cooking", "요리")
         CERTIFICATION = ("certification", "인증")
 
-    kind = models.CharField(max_length=10, choices=NotificationKindChoices.choices)
+    kind = models.CharField(max_length=20, choices=NotificationKindChoices.choices)
     creator = models.ForeignKey(
         "users.User", on_delete=models.CASCADE, related_name="creator"
     )
