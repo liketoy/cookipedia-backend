@@ -25,3 +25,11 @@ class PrivateUserSerializer(serializers.ModelSerializer):
             "birth_date",
             "phone_number",
         )
+
+
+class FollowingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.User
+        fields = [
+            "nickname",
+        ]

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
+from common.models import TimeStampedModel
 
 
 class User(AbstractUser):
@@ -26,3 +27,4 @@ class User(AbstractUser):
     phone_number = models.CharField(
         validators=[phoneNumberReg], max_length=11, unique=True
     )
+    followee = models.ManyToManyField("self", symmetrical=False)

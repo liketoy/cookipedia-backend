@@ -117,3 +117,53 @@ class PublicUserView(APIView):
             return Response(serializer.data)
         except models.User.DoesNotExist:
             raise exceptions.NotFound
+
+
+class FollowingView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, nickname):
+        try:
+            slug_nickname = slug_to_name(nickname)
+            try:
+                followee = models.User.objects.get(nickname=slug_nickname)
+
+                followee_list = request.user.followee.all()
+                print(followee_list)
+                if followee in followee_list:
+                    serializer = serializers.FollowingSerializer(
+                        followee_list, many=True
+                    )
+                    print("OK")
+                    return Response(serializer.data)
+                else:
+                    print("OK1")
+                    return Response()
+            except models.User.DoesNotExist:
+                raise exceptions.NotFound
+        except models.User.DoesNotExist:
+            raise exceptions.NotFound
+
+    def patch(self, request, nickname):
+        try:
+            slug_nickname = slug_to_name(nickname)
+            try:
+                followee = models.User.objects.get(nickname=slug_nickname)
+                try:
+                    if slug_nickname != request.user:
+                        followee_list = request.user.followee.all()
+                        if followee in followee_list:
+                            request.user.followee.remove(followee)
+                            return Response({"Following": "Delete"})
+                        else:
+                            request.user.followee.add(followee)
+                            followee.save()
+                            return Response({"Following": "Success"})
+                    else:
+                        raise exceptions.NotFound
+                except models.User.DoesNotExist:
+                    raise exceptions.NotFound
+            except models.User.DoesNotExist:
+                raise exceptions.NotFound
+        except models.User.DoesNotExist:
+            raise exceptions.NotFound

@@ -20,6 +20,7 @@ class CustomUserAdmin(UserAdmin):
                     "address",
                     "birth_date",
                     "phone_number",
+                    "followee",
                 ),
                 "classes": ("wide",),
             },
@@ -45,7 +46,9 @@ class CustomUserAdmin(UserAdmin):
             },
         ),
     )
-
+    filter_horizontal = [
+        "followee",
+    ]
     list_display = (
         "username",
         "email",

@@ -11,4 +11,5 @@ urlpatterns = [
     path("logout", views.LogOutView.as_view()),
     path("password", views.ChangePasswordView.as_view()),
     path("@<str:nickname>", views.PublicUserView.as_view()),
+    path("@<str:nickname>/following", views.FollowingView.as_view()),
 ]
