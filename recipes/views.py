@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from django.shortcuts import get_object_or_404
 from rest_framework import permissions, exceptions
 from rest_framework.viewsets import ModelViewSet
@@ -77,6 +78,10 @@ class RecipeRecommendationView(APIView):
             recipes, many=True, context={"user_ingredients": user_ingredients}
         )
         return Response(recommendation_serializer.data)
+    
+# 내가 가진 재료 중 레시피에서 주재료로 사용된 것을 추천.
+# 내가 가진 재료 중 없어도 되는 재료의 수량을 입력 받고 레시피를 추천. <- 내가
+# 쿼리 스트링으로 두가지 추천 구분 파라미터는 q = main_ingredient랑 unneeded_amount
 
 
 class RecipeLikeView(APIView):

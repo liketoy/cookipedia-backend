@@ -20,3 +20,4 @@ class Recipe(TimeStampedModel):
     likes_user = models.ManyToManyField(
         "users.User", related_name="likes_user", blank=True
     )
+    
