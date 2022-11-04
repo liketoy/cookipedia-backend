@@ -54,14 +54,17 @@ class MyPantryView(APIView):
         return Response(serializer.data)
 
     def patch(self, request):
+        # json 보낼 때 "ingredients": [storeingredient의 pk]
         store_ingredients = request.data.get("ingredients")
         user = request.user
         pantry = user.pantry
-        ingredients = models.StoreIngredient.objects.filter(
-            pk__in=store_ingredients, pantry=pantry
-        )
-        if ingredients.exists():
-            ingredients.delete()
+        if store_ingredients:
+            ingredients = models.StoreIngredient.objects.filter(
+                pk__in=store_ingredients, pantry=pantry
+            )
+            if ingredients.exists():
+                ingredients.delete()
+
         serializer = serializers.PantrySerializer(pantry, context={"request": request})
         return Response(serializer.data)
 

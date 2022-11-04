@@ -35,3 +35,11 @@ class Notification(TimeStampedModel):
 
     def __str__(self) -> str:
         return f"{self.to} - {self.kind} 알림"
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["kind", "recipe"],
+                name="like_limit"
+            )
+        ]
