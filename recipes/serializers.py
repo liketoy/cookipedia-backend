@@ -3,6 +3,8 @@ from recipes import models
 from users.serializers import TinyRelatedUserSerializer
 from foods.serializers import TinyFoodSerializer
 from ingredients.serializers import TinyIngredientSerializer
+from pantries.serializers import StoreIngredientSerializer
+from pantries.models import StoreIngredient, Pantry
 
 
 class RecipeSerializer(serializers.ModelSerializer):
@@ -31,3 +33,46 @@ class RecipeSerializer(serializers.ModelSerializer):
             }
         )
         return response
+
+
+class RecipeIngredientSerializer(serializers.ModelSerializer):
+    ingredient = TinyIngredientSerializer()
+
+    class Meta:
+        model = models.TypeIngredient
+        fields = (
+            "ingredient",
+            "type",
+        )
+
+
+class RecommendSerializer(serializers.ModelSerializer):
+    food = serializers.StringRelatedField()
+    ingredients = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = models.Recipe
+
+        fields = (
+            "title",
+            "food",
+            "ingredients",
+        )
+
+    def get_ingredients(self, obj):
+        queryset = models.TypeIngredient.objects.filter(recipe=obj)
+        serializer = RecipeIngredientSerializer(queryset, many=True)
+        return {"results": serializer.data}
+
+
+# class RecommendPantrySerializer(serializers.ModelSerializer):
+#     ingredients = serializers.SerializerMethodField(read_only=True)
+
+#     class Meta:
+#         model = Pantry
+#         fields = ("ingredients",)
+
+#     def get_ingredients(self, obj):
+#         queryset = StoreIngredient.objects.filter(pantry=obj)
+#         serializer = StoreIngredientSerializer(queryset, many=True)
+#         return {"results": serializer.data}

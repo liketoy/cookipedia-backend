@@ -46,6 +46,8 @@ CUSTOM_APPS = [
     "ingredients.apps.IngredientsConfig",
     "pantries.apps.PantriesConfig",
     "recipes.apps.RecipesConfig",
+    "notifications.apps.NotificationsConfig",
+    "certification.apps.CertificationConfig",
 ]
 
 SYSTEM_APPS = [
