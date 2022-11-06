@@ -72,3 +72,5 @@ class CertificationView(APIView):
 
         except Notification.DoesNotExist:
             raise exceptions.NotFound("인증을 요청했거나, 해당 요리를 하지 않았습니다.")
+
+    # viewset을 사용하지 않고,오로지 apiview만 사용해서 rest framework페이지에서 사진을 업로드 할 수 있나...?
