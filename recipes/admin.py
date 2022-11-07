@@ -17,5 +17,5 @@ class RecipeAdmin(admin.ModelAdmin):
         RecipeEvaluationAdmin
     ]
     list_display = ("title", "food", "writer")
-    search_fields = ("title", "food__name", "ingredient__name")
+    search_fields = ("title", "food__name", "ingredients__name")
     filter_horizontal = ("likes_user", )

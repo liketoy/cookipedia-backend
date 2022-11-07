@@ -137,6 +137,9 @@ class RecipeRecommendationView(APIView):
                         pk_array.append(object["pk"])
             recipes = models.Recipe.objects.filter(pk__in=pk_array)
             
+            if not recipes:
+                return Response("요리 가능한 레시피가 없어요 ㅠㅠ...")
+            
             if n is None:
                 serializer = serializers.RecipeSerializer(recipes, many=True)
             else:
