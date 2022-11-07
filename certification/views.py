@@ -18,9 +18,9 @@ class CertificationListView(APIView):
     def get(self, request):
         user = request.user
         print(user)
-        certification_list = Notification.objects.filter(creator=user)
+        notification_list = Notification.objects.filter(creator=user, kind="cooking")
         serializer = serializers.CertificationListSerializer(
-            certification_list, many=True
+            notification_list, many=True
         )
         return Response(serializer.data)
 
@@ -31,12 +31,13 @@ class CertificationView(APIView):
     def get(self, request, pk):
         user = request.user
         try:
-            certification = Notification.objects.get(
+            notification = Notification.objects.get(
                 pk=pk,
                 creator=user,
+                kind="cooking",
             )
-            if certification.created_at >= timezone.now() - timedelta(hours=24):
-                serializer = serializers.CertificationListSerializer(certification)
+            if notification.created_at >= timezone.now() - timedelta(hours=24):
+                serializer = serializers.CertificationListSerializer(notification)
                 return Response(serializer.data)
             else:
                 raise exceptions.NotAcceptable("유효시간이 지났습니다.")
@@ -46,24 +47,25 @@ class CertificationView(APIView):
     def post(self, request, pk):
         user = request.user
         try:
-            certification = Notification.objects.get(
+            notification = Notification.objects.get(
                 pk=pk,
                 creator=user,
                 is_completed=False,
+                kind="cooking",
             )
-            if certification.created_at >= timezone.now() - timedelta(hours=24):
+            if notification.created_at >= timezone.now() - timedelta(hours=24):
                 if request.FILES.get("image"):
                     certification_post = Certification.objects.create(
-                        food=certification.food,
-                        recipe=certification.recipe,
+                        food=notification.food,
+                        recipe=notification.recipe,
                         photo=request.FILES.get("image"),
                         target=user,
                         status=False,
                     )
                     serializer = serializers.CertificationSerializer(certification_post)
                     serializer.save()
-                    certification.is_completed = True
-                    certification.save()
+                    notification.is_completed = True
+                    notification.save()
                     return Response(serializer.data)
                 else:
                     raise exceptions.NotAuthenticated("사진이 없습니다.")
