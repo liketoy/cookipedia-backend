@@ -19,3 +19,5 @@ class RecipeAdmin(admin.ModelAdmin):
     list_display = ("title", "food", "writer")
     search_fields = ("title", "food__name", "ingredients__name")
     filter_horizontal = ("likes_user", )
+    
+# 평점 추가 / 모델은 건들 x

@@ -26,7 +26,7 @@ class Recipe(TimeStampedModel):
         related_name="evaluations_user",
         blank=True,
         through="RecipeEvaluation",
-    )
+    ) # 이 필드는 굳이 필요 없을듯? <- 어차피 회원정보 필요 x
 
 
 class TypeIngredient(models.Model):

@@ -99,22 +99,11 @@ class RecipeRecommendationView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):  # url: recommendations?q=un~~&n=2
-        q = request.GET.get("q", "unneeded_amount")
-        if q == "unneeded_amount":
+        q = request.GET.get("q", "hans_recommendation")
+        if q == "hans_recommendation":
             n = request.GET.get("n", None)
             user = request.user
             user_ingredients = user.pantry.ingredients.all()
-
-            # qs = models.Recipe.objects.filter(ingredients__in=user_ingredients).distinct()
-            # recipes = qs
-            # print('체크 1 >> ', qs)
-            # qs = qs.annotate(
-            #     recipe_pk=F("pk"),
-            #     ingredient_pk=F("ingredients"),
-            # ).values("recipe_pk", "ingredient_pk")
-            # print('체크 2 >> ', qs)
-            # qs = qs.values('recipe_pk').annotate(count=Count('ingredient_pk'))
-            # print('체크 3 >> ', qs)
 
             qs = (
                 models.Recipe.objects.filter(ingredients__in=user_ingredients)
@@ -122,9 +111,9 @@ class RecipeRecommendationView(APIView):
                 .values("pk")
                 .annotate(count=Count("pk"))
             )
-            print('테스트', qs)
+            
             pk_array = []
-            if n is None: 
+            if n is None:
             # 내가 가진 재료로 충분히 만들 수 있는 레시피들
                 for object in qs:
                     if models.Recipe.objects.get(pk=object["pk"]).ingredients.count() == object["count"]:

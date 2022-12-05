@@ -37,6 +37,7 @@ ALLOWED_HOSTS = []
 
 THIRD_PARTY_APPS = [
     "rest_framework",
+    "debug_toolbar",
 ]
 
 CUSTOM_APPS = [
@@ -68,6 +69,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -155,3 +157,5 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "common.paginators.CustomResultsSetPagination",
     "PAGE_SIZE": 100,
 }
+
+INTERNAL_IPS = ("127.0.0.1",)

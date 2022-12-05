@@ -8,7 +8,7 @@ from ingredients.serializers import TinyIngredientSerializer
 class RecipeSerializer(serializers.ModelSerializer):
     writer = TinyRelatedUserSerializer(read_only=True)
     likes_user = TinyRelatedUserSerializer(read_only=True, many=True)
-    evaluations_user = serializers.SerializerMethodField(read_only=True)
+    evaluations_score = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = models.Recipe
@@ -21,7 +21,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             "writer",
             "content",
             "likes_user",
-            "evaluations_user",
+            "evaluations_score",
         )
 
     def to_representation(self, instance):
@@ -36,7 +36,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         )
         return response
 
-    def get_evaluations_user(self, obj):
+    def get_evaluations_score(self, obj):
         recipe = models.Recipe.objects.get(pk=obj.pk)
         users = models.RecipeEvaluation.objects.filter(recipe=recipe)
         sum = 0
