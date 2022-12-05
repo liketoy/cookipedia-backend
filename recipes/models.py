@@ -11,9 +11,27 @@ class Recipe(TimeStampedModel):
         "foods.Food", related_name="recipes", on_delete=models.CASCADE
     )
     ingredients = models.ManyToManyField(
-        "ingredients.Ingredient", related_name="recipes"
+        "ingredients.Ingredient", related_name="recipes", through="TypeIngredient"
     )
     writer = models.ForeignKey(
         "users.User", on_delete=models.CASCADE, related_name="recipes"
     )
     content = models.TextField()
+
+
+class TypeIngredient(TimeStampedModel):
+    class IngredientTypeChoices(models.TextChoices):
+        MAIN = ("main", "주재료")
+        SUB = ("sub", "부재료")
+        SOURCE = ("source", "양념")
+
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    ingredient = models.ForeignKey("ingredients.Ingredient", on_delete=models.CASCADE)
+    type = models.CharField(max_length=10, choices=IngredientTypeChoices.choices)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["recipe", "ingredient"], name="recipe_ingredient"
+            ),
+        ]
