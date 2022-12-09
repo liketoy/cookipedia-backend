@@ -44,7 +44,9 @@ class SignUpView(APIView):
         if not password:
             raise exceptions.ParseError
         serializer = serializers.PrivateUserSerializer(data=request.data)
+        print(request.data.get("password"))
         if serializer.is_valid():
+            print(request.data.get("password"), 'zz')
             user = serializer.save()
             user.set_password(password)
             user.save()
