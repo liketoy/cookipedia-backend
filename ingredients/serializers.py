@@ -8,6 +8,7 @@ class TinyIngredientSerializer(serializers.ModelSerializer):
         fields = (
             "pk",
             "name",
+            "category"
         )
 
 

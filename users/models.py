@@ -19,7 +19,7 @@ class User(AbstractUser):
     name = models.CharField(max_length=40)
     nickname = models.CharField(max_length=40, unique=True)
     gender = models.CharField(choices=GENDER_CHOICES, blank=False, max_length=30)
-    avatar = models.ImageField(blank=True, upload_to="avatar/%Y/%m/%d/")
+    avatar = models.ImageField(blank=True, upload_to="avatar/%Y/%m/%d/", null=True)
     address = models.CharField(max_length=140)
     birth_date = models.DateField(null=True, blank=True)
     phoneNumberReg = RegexValidator(regex=r"01([0|1|6|7|8|9]{1,1})\d{3,4}\d{4}")

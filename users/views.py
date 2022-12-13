@@ -41,12 +41,18 @@ class SignUpView(APIView):
 
     def post(self, request):
         password = request.data.get("password")
+        nickname = request.data.get("nickname")
+        if not nickname or len(nickname) < 3:
+            return Response(
+                {"error": "닉네임은 최소 3글자입니다."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if not password:
             raise exceptions.ParseError
         serializer = serializers.PrivateUserSerializer(data=request.data)
-        print(request.data.get("password"))
         if serializer.is_valid():
-            print(request.data.get("password"), 'zz')
+            print(request.data.get("password"), "zz")
             user = serializer.save()
             user.set_password(password)
             user.save()

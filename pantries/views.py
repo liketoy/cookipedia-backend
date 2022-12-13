@@ -27,6 +27,7 @@ class MyPantryView(APIView):
     def get(self, request):
         user = request.user
         pantry = user.pantry
+        print(user, pantry, "ㅋㅋ")  # test
         serializer = serializers.PantrySerializer(pantry, context={"request": request})
         return Response(serializer.data)
 
