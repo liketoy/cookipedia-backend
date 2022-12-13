@@ -66,3 +66,10 @@ $ python manage.py makemigrations
 $ python manage.py migrate
 $ python manage.py createsuperuser
 ```
+
+알림이 필요한 경우
+
+1. 좋아요
+2. 팔로우
+3. 인증
+4.

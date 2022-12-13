@@ -1,6 +1,9 @@
 from rest_framework import permissions
+from rest_framework.response import Response
+from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
 from django.db.models import Q
+from notifications.views import create_notification
 from recipes import models, serializers
 from recipes.permissions import IsWriter
 
@@ -39,3 +42,17 @@ class RecipeViewSet(ModelViewSet):
         results = paginator.paginate_queryset(recipes, request)
         serializer = self.get_serializer(results, many=True)
         return paginator.get_paginated_response(serializer.data)
+
+    @action(detail=True, methods=["post"])
+    def cooking(self, request, pk):
+        user = request.user
+        recipe = self.get_object()
+        create_notification(
+            user,
+            user,
+            "cooking",
+            food=recipe.food,
+            recipe=recipe,
+            preview=f"{recipe} 요리 시작",
+        )
+        return Response({"ok": True})
