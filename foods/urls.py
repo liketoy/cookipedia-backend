@@ -24,4 +24,5 @@ urlpatterns = [
         ),
     ),
     path("search", views.FoodViewSet.as_view({"get": "search"})),
+    path("categories", views.FoodViewSet.as_view({"get": "categories"})),
 ]

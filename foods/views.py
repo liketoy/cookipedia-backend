@@ -39,3 +39,8 @@ class FoodViewSet(ModelViewSet):
             raise exceptions.NotFound
         serializer = self.get_serializer(foods, many=True)
         return Response(serializer.data)
+
+    @action(detail=False, methods=["get"])
+    def categories(self, request):
+        categories = models.Food.FoodCategoryChoices.values
+        return Response(categories)

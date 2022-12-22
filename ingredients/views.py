@@ -38,3 +38,8 @@ class IngredientViewSet(ModelViewSet):
             raise exceptions.NotFound
         serializer = self.get_serializer(ingredients, many=True)
         return Response(serializer.data)
+
+    @action(detail=False, methods=["get"])
+    def categories(self, request):
+        categories = models.Ingredient.IngredientCategoryChoices.values
+        return Response(categories)

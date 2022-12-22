@@ -47,6 +47,7 @@ CUSTOM_APPS = [
     "ingredients.apps.IngredientsConfig",
     "pantries.apps.PantriesConfig",
     "recipes.apps.RecipesConfig",
+    "notifications.apps.NotificationsConfig",
 ]
 
 SYSTEM_APPS = [
@@ -153,15 +154,31 @@ MEDIA_URL = "/media/"
 
 # DRF
 REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+    ],
     "DEFAULT_PAGINATION_CLASS": "common.paginators.CustomResultsSetPagination",
     "PAGE_SIZE": 100,
 }
 
+# CORS
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000"]
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:3000",
+]
+
+if not DEBUG:
+    AWS_ACCESS_KEY_ID = env.str("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = env.str("AWS_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = env.str("AWS_STORAGE_BUCKET_NAME")
+    AWS_S3_REGION_NAME = "ap-northeast-2"
+    AWS_DEFAULT_ACL = "public-read"
+    AWS_S3_CUSTOM_DOMAIN = (
+        f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+    )
+    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"

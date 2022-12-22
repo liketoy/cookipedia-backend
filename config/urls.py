@@ -17,6 +17,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
+from common.views import QuillEditorUploader
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -25,6 +26,7 @@ urlpatterns = [
     path("api/foods/", include("foods.urls")),
     path("api/pantries/", include("pantries.urls")),
     path("api/recipes/", include("recipes.urls")),
+    path("api/quill/upload/", QuillEditorUploader.as_view()),
 ]
 
 if settings.DEBUG:

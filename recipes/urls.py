@@ -23,4 +23,12 @@ urlpatterns = [
             }
         ),
     ),
+    path(
+        "<int:pk>/cooking",
+        views.RecipeViewSet.as_view(
+            {
+                "post": "cooking",
+            }
+        ),
+    ),
 ]
