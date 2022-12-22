@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from recipes import models
 from users.serializers import TinyRelatedUserSerializer
-from foods.serializers import TinyFoodSerializer
+from foods.serializers import FoodSerializer
 from ingredients.serializers import TinyIngredientSerializer
 
 
@@ -24,7 +24,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         response = super().to_representation(instance)
         response.update(
             {
-                "food": TinyFoodSerializer(instance.food, read_only=True).data,
+                "food": FoodSerializer(instance.food, read_only=True).data,
                 "ingredients": TinyIngredientSerializer(
                     instance.ingredients, many=True, read_only=True
                 ).data,

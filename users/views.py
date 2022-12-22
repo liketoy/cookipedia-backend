@@ -20,6 +20,7 @@ class MeView(APIView):
 
     def put(self, request):
         user = request.user
+        print(request.FILELIST)
         serializer = serializers.PrivateUserSerializer(
             user, data=request.data, partial=True
         )
