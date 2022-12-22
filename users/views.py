@@ -15,7 +15,9 @@ class MeView(APIView):
 
     def get(self, request):
         user = request.user
-        serializer = serializers.PrivateUserSerializer(user)
+        serializer = serializers.PrivateUserSerializer(
+            user, context={"request": request}
+        )
         return Response(serializer.data)
 
     def put(self, request):
