@@ -54,7 +54,7 @@ class MyPantryView(APIView):
         serializer = serializers.PantrySerializer(pantry, context={"request": request})
         return Response(serializer.data)
 
-    def patch(self, request):
+    def patch(self, request):  # 여러개 체크한 거 지우기
         store_ingredients = request.data.get("ingredients")
         user = request.user
         pantry = user.pantry
@@ -86,7 +86,7 @@ class StoreIngredientInPantryView(APIView):
         except models.StoreIngredient.DoesNotExist:
             raise exceptions.NotFound
 
-    def delete(self, request, pk):
+    def delete(self, request, pk):  # 한개만 지우기
         try:
             ingredient = models.StoreIngredient.objects.get(pk=pk)
             ingredient.delete()
