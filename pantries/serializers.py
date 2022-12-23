@@ -3,7 +3,7 @@ from django.core.paginator import Paginator
 from django.utils import timezone
 from pantries import models
 from users.serializers import TinyRelatedUserSerializer
-from ingredients.serializers import TinyIngredientSerializer
+from ingredients.serializers import IngredientSerializer
 
 
 class StoreIngredientSerializer(serializers.ModelSerializer):
@@ -25,7 +25,7 @@ class StoreIngredientSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         response = super().to_representation(instance)
         response.update(
-            {"ingredient": TinyIngredientSerializer(instance.ingredient).data}
+            {"ingredient": IngredientSerializer(instance.ingredient).data}
         )
         return response
 
