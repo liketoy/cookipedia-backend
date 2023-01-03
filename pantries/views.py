@@ -78,8 +78,8 @@ class StoreIngredientInPantryView(APIView):
             )
             if serializer.is_valid():
                 serializer.save()
-                pantry_serializer = serializers.PantrySerializer(request.user.pantry)
-                return Response(pantry_serializer.data)
+                # pantry_serializer = serializers.PantrySerializer(request.user.pantry)
+                return Response({"ok": True})
             else:
                 return Response(serializer.errors)
         except models.StoreIngredient.DoesNotExist:

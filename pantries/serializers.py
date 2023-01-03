@@ -8,7 +8,9 @@ from ingredients.serializers import IngredientSerializer
 
 class StoreIngredientSerializer(serializers.ModelSerializer):
     is_status = serializers.SerializerMethodField(read_only=True)
-
+    # date_bought = serializers.DateField(required=False, allow_null=True)
+    # expiry_date = serializers.DateField(required=False, allow_null=True)
+    
     class Meta:
         model = models.StoreIngredient
         fields = (
@@ -34,6 +36,16 @@ class StoreIngredientSerializer(serializers.ModelSerializer):
         if data is not None and data > now:
             raise serializers.ValidationError("미래에서 사오신 겁니까...?")
         return data
+    
+    def to_internal_value(self, data):  # 구매일자, 폐기일자의 null값 허용을 위한 함수
+        try:
+            if data["date_bought"] == "":
+                data["date_bought"] = None
+            if data["expiry_date"] == "":
+                data["expiry_date"] = None
+        except:
+            pass
+        return super(StoreIngredientSerializer, self).to_internal_value(data)
 
 
 class PantrySerializer(serializers.ModelSerializer):

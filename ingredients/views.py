@@ -10,7 +10,7 @@ class IngredientViewSet(ModelViewSet):
     queryset = models.Ingredient.objects.all()
 
     def get_permissions(self):
-        if self.action == "list" or self.action == "retrieve":
+        if self.action == "list" or self.action == "retrieve" or self.action == "categories" or self.action == "search":
             permission_classes = [permissions.AllowAny]
         else:
             permission_classes = [permissions.IsAdminUser]
@@ -25,12 +25,12 @@ class IngredientViewSet(ModelViewSet):
         paginator = self.paginator
         results = paginator.paginate_queryset(ingredients, request)
         serializer = self.get_serializer(results, many=True)
-
         return paginator.get_paginated_response(serializer.data)
 
     @action(detail=False, methods=["get"])
     def search(self, request):
         q = request.GET.get("q", None)
+        print(q)
         if q is None:
             raise exceptions.ParseError
         ingredients = self.queryset.filter(name__icontains=q)

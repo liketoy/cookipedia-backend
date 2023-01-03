@@ -11,7 +11,7 @@ class FoodViewSet(ModelViewSet):
     queryset = models.Food.objects.all()
 
     def get_permissions(self):
-        if self.action == "list" or self.action == "retrieve":
+        if self.action == "list" or self.action == "retrieve" or self.action == "search":
             permission_classes = [permissions.AllowAny]
         else:
             permission_classes = [permissions.IsAdminUser]

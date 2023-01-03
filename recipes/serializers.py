@@ -7,7 +7,9 @@ from ingredients.serializers import TinyIngredientSerializer
 
 class RecipeSerializer(serializers.ModelSerializer):
     writer = TinyRelatedUserSerializer(read_only=True)
-
+    created_at = serializers.DateTimeField(format="%Y %m %d %H:%M")
+    updated_at = serializers.DateTimeField(format="%Y %m %d %H:%M")
+    
     class Meta:
         model = models.Recipe
         fields = (
@@ -18,6 +20,8 @@ class RecipeSerializer(serializers.ModelSerializer):
             "ingredients",
             "writer",
             "content",
+            "created_at",
+            "updated_at"
         )
 
     def to_representation(self, instance):
@@ -31,3 +35,20 @@ class RecipeSerializer(serializers.ModelSerializer):
             }
         )
         return response
+
+
+class IngredientsNeededSerializer(RecipeSerializer):
+    ingredients_needed = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = models.Recipe
+        fields = RecipeSerializer.Meta.fields + ("ingredients_needed",)
+
+    def get_ingredients_needed(self, obj):
+        user_ingredients = self.context.get("user_ingredients")
+        recipe = models.Recipe.objects.get(pk=obj.pk)
+
+        ingredients_needed = recipe.ingredients.exclude(pk__in=user_ingredients)
+        serializer = TinyIngredientSerializer(ingredients_needed, many=True)
+
+        return serializer.data
