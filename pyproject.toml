@@ -18,6 +18,7 @@ django-storages = "^1.13.1"
 boto3 = "^1.26.35"
 zappa = "^0.56.1"
 psycopg2 = "^2.9.5"
+psycopg2-binary = "^2.9.5"
 
 
 [tool.poetry.group.dev.dependencies]
