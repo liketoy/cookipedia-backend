@@ -16,6 +16,7 @@ djangorestframework = "^3.14.0"
 django-cors-headers = "^3.13.0"
 django-storages = "^1.13.1"
 boto3 = "^1.26.35"
+zappa = "^0.56.1"
 
 
 [tool.poetry.group.dev.dependencies]
