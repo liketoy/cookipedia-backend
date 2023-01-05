@@ -1,9 +1,10 @@
 {
-    "production": {
-        "django_settings": "config.settings",
-        "profile_name": "cookipedia",
-        "project_name": "cookipedia-back",
-        "runtime": "python3.8",
-        "s3_bucket": "cookipedia-s3"
-    }
+  "production": {
+    "django_settings": "config.settings",
+    "profile_name": "cookipedia",
+    "project_name": "cookipedia-back",
+    "runtime": "python3.8",
+    "s3_bucket": "cookipedia-s3",
+    "aws_region": "ap-northeast-2"
+  }
 }

@@ -33,7 +33,7 @@ DEBUG = env.bool("DEBUG")
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    "izhz135p5f.execute-api.ap-northeast-2.amazonaws.com",
+    "2ui7xgds47.execute-api.ap-northeast-2.amazonaws.com",
 ]
 
 
@@ -187,10 +187,10 @@ if DEBUG:
     ]
 else:
     CORS_ALLOWED_ORIGINS = [
-        "https://izhz135p5f.execute-api.ap-northeast-2.amazonaws.com",
+        "https://2ui7xgds47.execute-api.ap-northeast-2.amazonaws.com",
     ]
     CSRF_TRUSTED_ORIGINS = [
-        "https://izhz135p5f.execute-api.ap-northeast-2.amazonaws.com",
+        "https://2ui7xgds47.execute-api.ap-northeast-2.amazonaws.com",
     ]
 
 CORS_ALLOW_CREDENTIALS = True
