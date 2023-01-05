@@ -197,6 +197,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 
 if not DEBUG:
+    print(env.str("AWS_ACCESS_KEY_ID"))
     REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = [
         "rest_framework.renderers.JSONRenderer",
     ]
