@@ -178,20 +178,12 @@ REST_FRAMEWORK = {
 }
 
 # CORS
-if DEBUG:
-    CORS_ALLOWED_ORIGINS = [
-        "http://127.0.0.1:3000",
-    ]
-    CSRF_TRUSTED_ORIGINS = [
-        "http://127.0.0.1:3000",
-    ]
-else:
-    CORS_ALLOWED_ORIGINS = [
-        "https://2ui7xgds47.execute-api.ap-northeast-2.amazonaws.com",
-    ]
-    CSRF_TRUSTED_ORIGINS = [
-        "https://2ui7xgds47.execute-api.ap-northeast-2.amazonaws.com",
-    ]
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:3000",
+]
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:3000",
+]
 
 CORS_ALLOW_CREDENTIALS = True
 
