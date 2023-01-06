@@ -13,8 +13,8 @@ class QuillEditorUploader(APIView):
             files = request.FILES.getlist("image")
             s3 = boto3.resource(
                 "s3",
-                aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
-                aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY"),
+                aws_access_key_id=os.environ.get("AWS_S3_ACCESS_KEY_ID"),
+                aws_secret_access_key=os.environ.get("AWS_S3_SECRET_ACCESS_KEY"),
             )
             ymd_path = datetime.now().strftime("%Y/%m/%d")
             for file in files:
