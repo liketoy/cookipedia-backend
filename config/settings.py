@@ -33,7 +33,7 @@ DEBUG = env.bool("DEBUG")
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    "2ui7xgds47.execute-api.ap-northeast-2.amazonaws.com",
+    "dzfdvxzpe5.execute-api.ap-northeast-2.amazonaws.com",
 ]
 
 
