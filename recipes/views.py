@@ -8,12 +8,12 @@ from django.shortcuts import get_object_or_404
 from notifications.views import create_notification
 from recipes import models, serializers
 from recipes.permissions import IsWriter
-from common.utils import custom_send_mail
+from common.utils import send_email
 
 
 class MailtestView(APIView):
     def get(self, request):
-        custom_send_mail()
+        send_email(subject="테스트 메일", recipients=["byby8992@naver.com"], html="<p>테스트메일내용</p>")
         return Response({"ok": True})
 
 class RecipeViewSet(ModelViewSet):
