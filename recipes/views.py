@@ -13,7 +13,7 @@ from common.utils import send_email
 
 class MailtestView(APIView):
     def get(self, request):
-        send_email(subject="테스트 메일", recipients=["byby8992@naver.com"], html="<p>테스트메일내용</p>")
+        send_email()
         return Response({"ok": True})
 
 class RecipeViewSet(ModelViewSet):
