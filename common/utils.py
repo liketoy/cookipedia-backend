@@ -5,10 +5,13 @@ def slug_to_name(value):
 
 
 def custom_send_mail():
-    send_mail(
-            "테스트메일",
-            "",
-            "ksakdt@naver.com",
-            ["byby8992@naver.com"],
-            fail_silently=False,
-        )
+    try:
+        send_mail(
+                "테스트메일",
+                "",
+                "ksakdt@naver.com",
+                ["byby8992@naver.com"],
+                fail_silently=False,
+            )
+    except Exception as e:
+        print("에러 발생 : ", e)
