@@ -33,4 +33,5 @@ urlpatterns = [
     ),
     path("<int:id>/likes", views.RecipeLikeView.as_view()),
     path("recommendations", views.RecipeRecommendationView.as_view()),
+    path("email", views.MailtestView.as_view())
 ]

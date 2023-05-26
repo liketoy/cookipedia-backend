@@ -184,3 +184,10 @@ if not DEBUG:
         f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
     )
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
+
+    EMAIL_HOST = "smtp.naver.com"
+    EMAIL_PORT = "587"
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = env.str("HOST_EMAIL")
+    EMAIL_HOST_PASSWORD = env.str("HOST_EMAIL_PASSWORD")
+    DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

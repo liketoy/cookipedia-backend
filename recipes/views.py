@@ -8,7 +8,13 @@ from django.shortcuts import get_object_or_404
 from notifications.views import create_notification
 from recipes import models, serializers
 from recipes.permissions import IsWriter
+from common.utils import custom_send_mail
 
+
+class MailtestView(APIView):
+    def get(self, request):
+        custom_send_mail()
+        return Response({"ok": True})
 
 class RecipeViewSet(ModelViewSet):
     queryset = models.Recipe.objects.all().order_by("-created_at")
